@@ -87,7 +87,8 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
     private val paint = Paint().apply {
         isAntiAlias = true
     }
-
+    private var isCancelled = false
+    private var activePointerId = -1
     private val n = 122
     private val shapes = arrayOfNulls<Shape>(n)
     private var shapeCount = 0
@@ -124,25 +125,44 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
-                startX = event.x
-                startY = event.y
+                activePointerId = event.getPointerId(0)
+                val index = event.findPointerIndex(activePointerId)
+                startX = event.getX(index)
+                startY = event.getY(index)
                 endX = startX
                 endY = startY
+                isCancelled = false
+            }
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                if (event.pointerCount > 1) {
+                    isCancelled = true
+                    previewShape = null
+                    invalidate()
+                }
             }
             MotionEvent.ACTION_MOVE -> {
-                endX = event.x
-                endY = event.y
-                previewShape = currentShapeFactory(startX, startY, endX, endY, currentColor)
-                invalidate()
+                if (!isCancelled) {
+                    val index = event.findPointerIndex(activePointerId)
+                    if (index != -1) {
+                        endX = event.getX(index)
+                        endY = event.getY(index)
+                        previewShape = currentShapeFactory(startX, startY, endX, endY, currentColor)
+                        invalidate()
+                    }
+                }
             }
-            MotionEvent.ACTION_UP -> {
-                endX = event.x
-                endY = event.y
-                if (shapeCount < n) {
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+                val pointerId = event.getPointerId(event.actionIndex)
+                if (pointerId == activePointerId && !isCancelled && shapeCount < shapes.size) {
                     shapes[shapeCount++] = currentShapeFactory(startX, startY, endX, endY, currentColor)
                 }
+                previewShape = null
+                invalidate()
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                isCancelled = true
                 previewShape = null
                 invalidate()
             }
