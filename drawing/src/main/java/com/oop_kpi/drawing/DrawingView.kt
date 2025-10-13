@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import kotlin.math.hypot
+import androidx.core.graphics.toColorInt
 
 abstract class Shape(
     val startX: Float,
@@ -14,55 +15,57 @@ abstract class Shape(
     val endY: Float,
     val color: Int
 ) {
-    abstract fun draw(canvas: Canvas, paint: Paint)
+    abstract fun draw(canvas: Canvas, paint: Paint, isPreview: Boolean = false)
 }
 
 class Ellipse(startX: Float, startY: Float, endX: Float, endY: Float, color: Int) :
     Shape(startX, startY, endX, endY, color) {
-
-    override fun draw(canvas: Canvas, paint: Paint) {
+    override fun draw(canvas: Canvas, paint: Paint, isPreview: Boolean) {
         val left = minOf(startX, endX)
         val top = minOf(startY, endY)
         val right = maxOf(startX, endX)
         val bottom = maxOf(startY, endY)
 
-        paint.color = color
-        paint.style = Paint.Style.FILL
+        paint.color = if (isPreview) "#275BF5".toColorInt() else color
+        paint.style = if (isPreview) Paint.Style.STROKE else Paint.Style.FILL
+        paint.strokeWidth = if (isPreview) 3f else 8f
+
         canvas.drawOval(RectF(left, top, right, bottom), paint)
     }
 }
 
 class Circle(startX: Float, startY: Float, endX: Float, endY: Float, color: Int) :
     Shape(startX, startY, endX, endY, color) {
-    override fun draw(canvas: Canvas, paint: Paint) {
-        val radius = hypot(
-            (endX - startX).toDouble(),
-            (endY - startY).toDouble()
-        ).toFloat()
-        paint.color = color
-        paint.style = Paint.Style.FILL
+    override fun draw(canvas: Canvas, paint: Paint, isPreview: Boolean) {
+        val radius = hypot((endX - startX).toDouble(), (endY - startY).toDouble()).toFloat()
+
+        paint.color = if (isPreview) "#7EC8E3".toColorInt() else color
+        paint.style = if (isPreview) Paint.Style.STROKE else Paint.Style.FILL
+        paint.strokeWidth = if (isPreview) 3f else 8f
+
         canvas.drawCircle(startX, startY, radius, paint)
     }
 }
-
 class Rectangle(startX: Float, startY: Float, endX: Float, endY: Float, color: Int) :
     Shape(startX, startY, endX, endY, color) {
-    override fun draw(canvas: Canvas, paint: Paint) {
+    override fun draw(canvas: Canvas, paint: Paint, isPreview: Boolean) {
         val left = minOf(startX, endX)
         val right = maxOf(startX, endX)
         val top = minOf(startY, endY)
         val bottom = maxOf(startY, endY)
-        paint.color = color
-        paint.style = Paint.Style.FILL
+
+        paint.color = if (isPreview) "#275BF5".toColorInt() else color
+        paint.style = if (isPreview) Paint.Style.STROKE else Paint.Style.FILL
+        paint.strokeWidth = if (isPreview) 3f else 8f
+
         canvas.drawRect(left, top, right, bottom, paint)
     }
 }
-
 class Line(startX: Float, startY: Float, endX: Float, endY: Float, color: Int) :
     Shape(startX, startY, endX, endY, color) {
-    override fun draw(canvas: Canvas, paint: Paint) {
-        paint.color = color
-        paint.strokeWidth = 8f
+    override fun draw(canvas: Canvas, paint: Paint, isPreview: Boolean) {
+        paint.color = if (isPreview) "#275BF5".toColorInt() else color
+        paint.strokeWidth = if (isPreview) 3f else 8f
         paint.style = Paint.Style.STROKE
         canvas.drawLine(startX, startY, endX, endY, paint)
     }
@@ -71,8 +74,6 @@ class Line(startX: Float, startY: Float, endX: Float, endY: Float, color: Int) :
 class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     private val paint = Paint().apply {
-        strokeWidth = 8f
-        style = Paint.Style.FILL
         isAntiAlias = true
     }
 
@@ -81,13 +82,14 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
     private var shapeCount = 0
 
     private var currentShapeFactory: (Float, Float, Float, Float, Int) -> Shape = ::Ellipse
-
     private var currentColor: Int = Color.BLACK
 
     private var startX = 0f
     private var startY = 0f
     private var endX = 0f
     private var endY = 0f
+
+    private var previewShape: Shape? = null
 
     init {
         setBackgroundColor(Color.WHITE)
@@ -106,6 +108,7 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
             shapes[i] = null
         }
         shapeCount = 0
+        previewShape = null
         invalidate()
     }
 
@@ -114,19 +117,22 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
                 startY = event.y
+                endX = startX
+                endY = startY
             }
             MotionEvent.ACTION_MOVE -> {
                 endX = event.x
                 endY = event.y
+                previewShape = currentShapeFactory(startX, startY, endX, endY, currentColor)
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
                 endX = event.x
                 endY = event.y
-                val shape = currentShapeFactory(startX, startY, endX, endY, currentColor)
                 if (shapeCount < n) {
                     shapes[shapeCount++] = currentShapeFactory(startX, startY, endX, endY, currentColor)
                 }
+                previewShape = null
                 invalidate()
             }
         }
@@ -138,5 +144,6 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
         for (i in 0 until shapeCount) {
             shapes[i]?.draw(canvas, paint)
         }
+        previewShape?.draw(canvas, paint, isPreview = true)
     }
 }
