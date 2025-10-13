@@ -8,8 +8,6 @@ import com.oop_kpi.drawing.Line
 import com.oop_kpi.drawing.Rectangle
 import com.oop_kpi.drawing.Shape
 
-// У ShapeDialog.kt
-
 class ShapeDialog {
 
     interface OnShapeSelected {
