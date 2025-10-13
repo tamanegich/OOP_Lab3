@@ -8,26 +8,42 @@ import com.oop_kpi.drawing.Line
 import com.oop_kpi.drawing.Rectangle
 import com.oop_kpi.drawing.Shape
 
+// У ShapeDialog.kt
+
 class ShapeDialog {
 
     interface OnShapeSelected {
         fun onShape(factory: (Float, Float, Float, Float, Int) -> Shape)
     }
 
-    fun show(context: Context, listener: OnShapeSelected) {
-        val shapes = listOf(
-            "Еліпс" to ::Ellipse,
-            "Круг" to ::Circle,
-            "Прямокутник" to ::Rectangle,
-            "Лінія" to ::Line
-        )
+    private val shapeFactories = listOf(
+        ::Ellipse,
+        ::Rectangle,
+        ::Circle,
+        ::Line
+    )
 
+    private val shapeNames = listOf(
+        "Еліпс",
+        "Прямокутник",
+        "Коло",
+        "Лінія"
+    )
+
+    fun getShapeName(factory: (Float, Float, Float, Float, Int) -> Shape): String {
+        val index = shapeFactories.indexOf(factory)
+        return if (index != -1) shapeNames[index] else "Фігура"
+    }
+
+    fun show(context: Context, listener: OnShapeSelected) {
+        val names = shapeNames.toTypedArray()
         AlertDialog.Builder(context)
             .setTitle("Оберіть фігуру")
-            .setItems(shapes.map { it.first }.toTypedArray()) { _, which ->
-                val factory = shapes[which].second
-                listener.onShape(factory)
+            .setItems(names) { _, which ->
+                val selectedFactory = shapeFactories[which]
+                listener.onShape(selectedFactory)
             }
             .show()
     }
 }
+

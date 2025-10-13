@@ -9,16 +9,30 @@ class ColorDialog {
         fun onColor(color: Int)
     }
 
+    private val colorNames = mapOf(
+        Color.RED to "Червоний",
+        Color.GREEN to "Зелений",
+        Color.BLUE to "Синій",
+        Color.YELLOW to "Жовтий",
+        Color.BLACK to "Чорний",
+        Color.GRAY to "Сірий",
+        Color.WHITE to "Білий",
+        Color.TRANSPARENT to "Прозорий"
+    )
+
+    fun getColorName(color: Int): String {
+        return colorNames[color] ?: "Інший"
+    }
+
     fun show(context: Context, listener: OnColorSelected) {
-        val colors = arrayOf("Червоний", "Зелений", "Синій", "Жовтий", "Чорний", "Білий", "Прозорий")
-        val colorValues = arrayOf(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.BLACK, Color.WHITE,
-            Color.TRANSPARENT)
+        val colorValues = colorNames.keys.toTypedArray()
+        val colorLabels = colorNames.values.toTypedArray()
 
         AlertDialog.Builder(context)
-            .setTitle("Select Color")
-            .setItems(colors) { _, which ->
-                listener.onColor(colorValues[which])
-            }
-            .show()
-    }
+            .setTitle("Оберіть колір")
+            .setItems(colorLabels) { _, which ->
+                val selectedColor = colorValues[which]
+                listener.onColor(selectedColor)
+            }.show()
+        }
 }
