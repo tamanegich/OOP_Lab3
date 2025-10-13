@@ -2,7 +2,7 @@ package com.oop_kpi.ui_components
 
 import android.app.AlertDialog
 import android.content.Context
-import com.oop_kpi.drawing.Elipse
+import com.oop_kpi.drawing.Ellipse
 import com.oop_kpi.drawing.Circle
 import com.oop_kpi.drawing.Line
 import com.oop_kpi.drawing.Rectangle
@@ -16,10 +16,10 @@ class ShapeDialog {
 
     fun show(context: Context, listener: OnShapeSelected) {
         val shapes = listOf(
-            "Еліпс" to ::Elipse,
+            "Еліпс" to ::Ellipse,
+            "Круг" to ::Circle,
             "Прямокутник" to ::Rectangle,
-            "Лінія" to ::Line,
-            "Круг" to ::Circle
+            "Лінія" to ::Line
         )
 
         AlertDialog.Builder(context)

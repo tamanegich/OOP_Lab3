@@ -17,7 +17,7 @@ abstract class Shape(
     abstract fun draw(canvas: Canvas, paint: Paint)
 }
 
-class Elipse(startX: Float, startY: Float, endX: Float, endY: Float, color: Int) :
+class Ellipse(startX: Float, startY: Float, endX: Float, endY: Float, color: Int) :
     Shape(startX, startY, endX, endY, color) {
 
     override fun draw(canvas: Canvas, paint: Paint) {
@@ -80,7 +80,7 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
     private val shapes = arrayOfNulls<Shape>(n)
     private var shapeCount = 0
 
-    private var currentShapeFactory: (Float, Float, Float, Float, Int) -> Shape = ::Elipse
+    private var currentShapeFactory: (Float, Float, Float, Float, Int) -> Shape = ::Ellipse
 
     private var currentColor: Int = Color.BLACK
 
