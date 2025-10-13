@@ -10,8 +10,9 @@ class ColorDialog {
     }
 
     fun show(context: Context, listener: OnColorSelected) {
-        val colors = arrayOf("Червоний", "Зелений", "Синій", "Жовтий", "Чорний", "Білий")
-        val colorValues = arrayOf(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.BLACK, Color.WHITE)
+        val colors = arrayOf("Червоний", "Зелений", "Синій", "Жовтий", "Чорний", "Білий", "Прозорий")
+        val colorValues = arrayOf(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.BLACK, Color.WHITE,
+            Color.TRANSPARENT)
 
         AlertDialog.Builder(context)
             .setTitle("Select Color")
