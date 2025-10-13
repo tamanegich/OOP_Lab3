@@ -76,7 +76,9 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
         isAntiAlias = true
     }
 
-    private val shapes = mutableListOf<Shape>()
+    private val n = 122
+    private val shapes = arrayOfNulls<Shape>(n)
+    private var shapeCount = 0
 
     private var currentShapeFactory: (Float, Float, Float, Float, Int) -> Shape = ::Elipse
 
@@ -100,7 +102,10 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
     }
 
     fun clearCanvas() {
-        shapes.clear()
+        for (i in 0 until shapeCount) {
+            shapes[i] = null
+        }
+        shapeCount = 0
         invalidate()
     }
 
@@ -119,7 +124,9 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
                 endX = event.x
                 endY = event.y
                 val shape = currentShapeFactory(startX, startY, endX, endY, currentColor)
-                shapes.add(shape)
+                if (shapeCount < n) {
+                    shapes[shapeCount++] = currentShapeFactory(startX, startY, endX, endY, currentColor)
+                }
                 invalidate()
             }
         }
@@ -128,8 +135,8 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        for (shape in shapes) {
-            shape.draw(canvas, paint)
+        for (i in 0 until shapeCount) {
+            shapes[i]?.draw(canvas, paint)
         }
     }
 }
