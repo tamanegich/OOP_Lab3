@@ -12,17 +12,19 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/bottom_panel"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <LinearLayout
         android:id="@+id/bottom_panel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:background="#512DA8"
         android:gravity="center"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -30,46 +32,92 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center"
-            android:padding="4dp">
+            android:orientation="vertical"
+            android:padding="0dp">
 
-            <TextView
-                android:id="@+id/shape_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Еліпс"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/shape_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <ImageButton
+                android:id="@+id/ellipse_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:backgroundTint="@color/purple_700"
-                android:padding="5dp"
-                android:text="Форма"
-                android:textColor="@color/purple_200"
-                android:textSize="11sp"
-                app:cornerRadius="16dp"
-                app:icon="@drawable/ic_shape"
-                app:iconGravity="top"
-                app:iconSize="20dp"
-                app:iconTint="@color/purple_200" />
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_ellips"
+                app:tint="@color/purple_200" />
         </LinearLayout>
 
-
-
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center"
-            android:padding="4dp">
+            android:orientation="vertical"
+            android:padding="0dp">
+
+            <ImageButton
+                android:id="@+id/rectangle_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:backgroundTint="@color/purple_700"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_rectangle"
+                app:tint="@color/purple_200" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="0dp">
+
+            <ImageButton
+                android:id="@+id/circle_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:backgroundTint="@color/purple_700"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_circle"
+                app:tint="@color/purple_200" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="0dp">
+
+            <ImageButton
+                android:id="@+id/line_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:backgroundTint="@color/purple_700"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_line"
+                app:tint="@color/purple_200" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="0dp">
 
             <TextView
                 android:id="@+id/color_label"
@@ -79,52 +127,72 @@
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/color_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/purple_700"
-                android:padding="5dp"
-                android:text="Колір"
-                android:textColor="@color/purple_200"
-                android:textSize="11sp"
-                app:cornerRadius="16dp"
-                app:icon="@drawable/ic_color"
-                app:iconGravity="top"
-                app:iconSize="20dp"
-                app:iconTint="@color/purple_200" />
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_color"
+                app:tint="@color/purple_200" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center"
-            android:padding="4dp">
+            android:orientation="vertical"
+            android:padding="0dp">
 
-            <TextView
-                android:id="@+id/erase_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="　"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+            <ImageButton
+                android:id="@+id/undo_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_undo"
+                app:tint="@color/purple_200" />
+        </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="0dp">
+
+            <ImageButton
+                android:id="@+id/redo_button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_redo"
+                app:tint="@color/purple_200" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="0dp">
+
+            <ImageButton
                 android:id="@+id/erase_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/purple_700"
-                android:padding="5dp"
-                android:text="Очистити"
-                android:textColor="@color/purple_200"
-                android:textSize="11sp"
-                app:cornerRadius="16dp"
-                app:icon="@drawable/ic_erase"
-                app:iconGravity="top"
-                app:iconSize="20dp"
-                app:iconTint="@color/purple_200" />
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_erase"
+                app:tint="@color/purple_200" />
         </LinearLayout>
 
     </LinearLayout>

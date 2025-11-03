@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.oop_kpi.lab21"
+    namespace = "com.oop_kpi.lab3"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.oop_kpi.lab21"
+        applicationId = "com.oop_kpi.lab3"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

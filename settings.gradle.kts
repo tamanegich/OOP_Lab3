@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "lab2.1"
+rootProject.name = "lab3"
 include(":app")
 include(":drawing")
 include(":ui_components")

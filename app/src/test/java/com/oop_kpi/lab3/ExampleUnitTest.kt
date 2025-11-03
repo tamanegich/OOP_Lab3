@@ -1,4 +1,4 @@
-package com.oop_kpi.lab21
+package com.oop_kpi.lab3
 
 import org.junit.Test
 

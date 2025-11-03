@@ -1,7 +1,7 @@
-package com.oop_kpi.lab21
+package com.oop_kpi.lab3
 
 import android.os.Bundle
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.oop_kpi.drawing.DrawingView
@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var drawingView: DrawingView
     private lateinit var colorLabel: TextView
-    private lateinit var shapeLabel: TextView
 
     private val colorDialog = ColorDialog()
     private val shapeDialog = ShapeDialog()
@@ -24,17 +23,16 @@ class MainActivity : AppCompatActivity() {
 
         drawingView = findViewById(R.id.drawing_view)
         colorLabel = findViewById(R.id.color_label)
-        shapeLabel = findViewById(R.id.shape_label)
 
-        val colorButton: Button = findViewById(R.id.color_button)
-        val shapeButton: Button = findViewById(R.id.shape_button)
-        val eraseButton: Button = findViewById(R.id.erase_button)
+        val colorButton: ImageButton = findViewById(R.id.color_button)
+        val shapeButton: ImageButton = findViewById(R.id.ellipse_button)
+        val eraseButton: ImageButton = findViewById(R.id.erase_button)
 
         colorButton.setOnClickListener {
             colorDialog.show(this, object : ColorDialog.OnColorSelected {
                 override fun onColor(color: Int) {
                     drawingView.setColor(color)
-                    colorLabel.text = "${colorDialog.getColorName(color)}"
+                    colorLabel.text = colorDialog.getColorName(color)
                 }
             })
         }
@@ -43,7 +41,6 @@ class MainActivity : AppCompatActivity() {
             shapeDialog.show(this, object : ShapeDialog.OnShapeSelected {
                 override fun onShape(factory: (Float, Float, Float, Float, Int) -> Shape) {
                     drawingView.setShape(factory)
-                    shapeLabel.text = "${shapeDialog.getShapeName(factory)}"
                 }
             })
         }
