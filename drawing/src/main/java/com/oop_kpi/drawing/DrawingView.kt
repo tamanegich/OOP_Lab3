@@ -30,6 +30,8 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
     private var endY = 0f
 
     private var previewShape: Shape? = null
+    private val undoStack = mutableListOf<Shape>()
+    private val redoStack = mutableListOf<Shape>()
 
     private val eventHandlers: Map<Int, (MotionEvent) -> Unit> = mapOf(
         MotionEvent.ACTION_DOWN to ::handleActionDown,
@@ -58,6 +60,8 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
         }
         shapeCount = 0
         previewShape = null
+        undoStack.clear()
+        redoStack.clear()
         invalidate()
     }
 
@@ -99,18 +103,19 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
     }
 
     private fun handleActionUp(event: MotionEvent) {
-        val pointerId = event.getPointerId(event.actionIndex)
-        if (pointerId == activePointerId && !isCancelled && shapeCount < shapes.size) {
-            shapes[shapeCount++] = currentShapeFactory(startX, startY, endX, endY, currentColor)
-        }
-        previewShape = null
-        invalidate()
+        addShapeIfValid(event.getPointerId(event.actionIndex))
     }
 
     private fun handlePointerUp(event: MotionEvent) {
-        val pointerId = event.getPointerId(event.actionIndex)
+        addShapeIfValid(event.getPointerId(event.actionIndex))
+    }
+
+    private fun addShapeIfValid(pointerId: Int) {
         if (pointerId == activePointerId && !isCancelled && shapeCount < shapes.size) {
-            shapes[shapeCount++] = currentShapeFactory(startX, startY, endX, endY, currentColor)
+            val shape = currentShapeFactory(startX, startY, endX, endY, currentColor)
+            shapes[shapeCount++] = shape
+            undoStack.add(shape)
+            redoStack.clear()
         }
         previewShape = null
         invalidate()
@@ -128,5 +133,27 @@ class DrawingView(context: Context, attrs: AttributeSet?) : View(context, attrs)
             shapes[i]?.draw(canvas, paint)
         }
         previewShape?.draw(canvas, paint, isPreview = true)
+    }
+
+    fun undo() {
+        if (undoStack.isNotEmpty()) {
+            val shape = undoStack.removeAt(undoStack.lastIndex)
+            redoStack.add(shape)
+            val index = shapes.indexOf(shape)
+            if (index != -1) {
+                shapes[index] = null
+                shapeCount--
+            }
+            invalidate()
+        }
+    }
+
+    fun redo() {
+        if (redoStack.isNotEmpty()) {
+            val shape = redoStack.removeAt(redoStack.lastIndex)
+            undoStack.add(shape)
+            shapes[shapeCount++] = shape
+            invalidate()
+        }
     }
 }
